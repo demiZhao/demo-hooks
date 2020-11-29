@@ -1,59 +1,56 @@
-import React from "react";
+import React, { useRef } from "react";
 
-export const formatTime = (time) => {
+const formatTime = (time) => {
   return time < 10 ? `0${time}` : time;
 };
 
-export const ClockSetting = ({ handleSetting = () => {} }) => {
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
+const ClockSetting = ({ handleSetting }) => {
+  const hhRef = useRef();
+  const mmRef = useRef();
+  const ssRef = useRef();
+
+  const reset = () => {
+    hhRef.current.value = "";
+    mmRef.current.value = "";
+    ssRef.current.value = "";
+  };
+
+  const handleClick = () => {
     const setting = {
-      hours: evt.target.hours.value,
-      minutes: evt.target.minutes.value,
-      seconds: evt.target.seconds.value
+      hours: hhRef.current.value,
+      minutes: mmRef.current.value,
+      seconds: ssRef.current.value
     };
-    //console.log(setting);
     handleSetting(setting);
-    //clear out
+    reset();
   };
   return (
-    <form className={"clock-settings"} onSubmit={handleSubmit}>
-      <input type="text" name="hours" placeholder="hh" maxLength="2" />
+    <div className={"clock-settings"}>
+      <input ref={hhRef} type="text" name="hh" placeholder="hh" />
       {":"}
-      <input type="text" name="minutes" placeholder="mm" maxLength="2" />
+      <input ref={mmRef} type="text" name="mm" placeholder="mm" />
       {":"}
-      <input type="text" name="seconds" placeholder="ss" maxLength="2" />
-      <button className={"btn-primary"} type="submit" value="Submit">
+      <input ref={ssRef} type="text" name="ss" placeholder="ss" />
+      <button className={"btn-primary"} onClick={handleClick}>
         Set
       </button>
-    </form>
+    </div>
   );
 };
-export const DigitalClock = ({
-  hours,
-  minutes,
-  seconds,
-  title,
-  handleSetting
-}) => {
+
+const DigitalClock = ({ hours, minutes, seconds, title, handleSetting }) => {
   return (
     <div className={"clock"}>
       <h3>{title}</h3>
       <div className={"digital-clock"}>
-        {/* {hours}:{minutes}:{seconds} */}
         {formatTime(hours)}:{formatTime(minutes)}:{formatTime(seconds)}
       </div>
       <ClockSetting handleSetting={handleSetting}></ClockSetting>
     </div>
   );
 };
-export const AnalogClock = ({
-  hours,
-  minutes,
-  seconds,
-  title,
-  handleSetting
-}) => {
+
+const AnalogClock = ({ hours, minutes, seconds, title, handleSetting }) => {
   const secondsStyle = {
     transform: `rotate(${seconds * 6}deg)`
   };
@@ -71,71 +68,9 @@ export const AnalogClock = ({
         <div className={"dial minutes"} style={minutesStyle} />
         <div className={"dial hours"} style={hoursStyle} />
       </div>
-      {/* <div className={"digital-clock"}>
-        {hours}:{minutes}:{seconds}
-      </div> */}
       <ClockSetting handleSetting={handleSetting}></ClockSetting>
     </div>
   );
 };
-// export default class Clock extends React.Component {
-//   clockInterval = "";
-//   constructor(props) {
-//     super(props);
-//     this.handleDate = this.handleDate.bind(this);
-//     this.state = {
-//       hours: 0,
-//       minutes: 0,
-//       seconds: 0
-//     };
-//   }
 
-//   componentDidMount() {
-//     this.clockInterval = setInterval(this.handleDate, 1000);
-//   }
-
-//   componentWillUnmount() {
-//     clearInterval(this.clockInterval);
-//   }
-
-//   render() {
-//     const { hours, minutes, seconds } = this.state;
-//     const secondsStyle = {
-//       transform: `rotate(${seconds * 6}deg)`
-//     };
-//     const minutesStyle = {
-//       transform: `rotate(${minutes * 6}deg)`
-//     };
-//     const hoursStyle = {
-//       transform: `rotate(${hours * 30}deg)`
-//     };
-//     const { title } = this.props;
-//     return (
-//       <div className={"clock"}>
-//         <h3>{title}</h3>
-//         <div className={"analog-clock"}>
-//           <div className={"dial seconds"} style={secondsStyle} />
-//           <div className={"dial minutes"} style={minutesStyle} />
-//           <div className={"dial hours"} style={hoursStyle} />
-//         </div>
-//         <div className={"digital-clock"}>
-//           {hours}:{minutes}:{seconds}
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   handleDate() {
-//     // const { datediff } = this.props;
-//     const date = new Date();
-//     //date.setHours(date.getHours() + datediff);
-//     let hours = this.formatTime(date.getHours());
-//     let minutes = this.formatTime(date.getMinutes());
-//     let seconds = this.formatTime(date.getSeconds());
-//     this.setState({ hours, minutes, seconds });
-//   }
-
-//   formatTime(time) {
-//     return time < 10 ? `0${time}` : time;
-//   }
-// }
+export { ClockSetting, DigitalClock, AnalogClock, formatTime };
