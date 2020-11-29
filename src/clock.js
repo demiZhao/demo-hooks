@@ -1,10 +1,29 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
+import { TimeContext } from "./index";
 
 const formatTime = (time) => {
   return time < 10 ? `0${time}` : time;
 };
 
-const ClockSetting = ({ handleSetting }) => {
+const getTime = ({ hours, minutes, seconds }) => {
+  const date = new Date();
+  date.setHours(hours);
+  date.setMinutes(minutes);
+  date.setSeconds(seconds);
+  return date.getTime();
+};
+
+const getHhmmss = (time) => {
+  const date = new Date(time);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  return { hours, minutes, seconds };
+};
+
+const ClockSetting = () => {
+  const { setTime } = useContext(TimeContext);
+
   const hhRef = useRef();
   const mmRef = useRef();
   const ssRef = useRef();
@@ -21,9 +40,10 @@ const ClockSetting = ({ handleSetting }) => {
       minutes: mmRef.current.value,
       seconds: ssRef.current.value
     };
-    handleSetting(setting);
+    setTime(getTime(setting));
     reset();
   };
+
   return (
     <div className={"clock-settings"}>
       <input ref={hhRef} type="text" name="hh" placeholder="hh" />
@@ -38,19 +58,25 @@ const ClockSetting = ({ handleSetting }) => {
   );
 };
 
-const DigitalClock = ({ hours, minutes, seconds, title, handleSetting }) => {
+const DigitalClock = ({ title }) => {
+  const { time } = useContext(TimeContext);
+  const { hours, minutes, seconds } = getHhmmss(time);
+
   return (
     <div className={"clock"}>
       <h3>{title}</h3>
       <div className={"digital-clock"}>
         {formatTime(hours)}:{formatTime(minutes)}:{formatTime(seconds)}
       </div>
-      <ClockSetting handleSetting={handleSetting}></ClockSetting>
+      <ClockSetting />
     </div>
   );
 };
 
-const AnalogClock = ({ hours, minutes, seconds, title, handleSetting }) => {
+const AnalogClock = ({ title }) => {
+  const { time, setTime } = useContext(TimeContext);
+  const { hours, minutes, seconds } = getHhmmss(time);
+
   const secondsStyle = {
     transform: `rotate(${seconds * 6}deg)`
   };
@@ -60,6 +86,7 @@ const AnalogClock = ({ hours, minutes, seconds, title, handleSetting }) => {
   const hoursStyle = {
     transform: `rotate(${hours * 30}deg)`
   };
+
   return (
     <div className={"clock"}>
       <h3>{title}</h3>
@@ -68,9 +95,16 @@ const AnalogClock = ({ hours, minutes, seconds, title, handleSetting }) => {
         <div className={"dial minutes"} style={minutesStyle} />
         <div className={"dial hours"} style={hoursStyle} />
       </div>
-      <ClockSetting handleSetting={handleSetting}></ClockSetting>
+      <ClockSetting />
     </div>
   );
 };
 
-export { ClockSetting, DigitalClock, AnalogClock, formatTime };
+export {
+  ClockSetting,
+  DigitalClock,
+  AnalogClock,
+  formatTime,
+  getTime,
+  getHhmmss
+};
