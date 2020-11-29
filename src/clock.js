@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState } from "react";
 import { TimeContext } from "./index";
 
 const formatTime = (time) => {
@@ -23,6 +23,9 @@ const getHhmmss = (time) => {
 
 const ClockSetting = () => {
   const { setTime } = useContext(TimeContext);
+  const [error, setError] = useState(null);
+
+  const hasError = (hh, mm, ss) => isNaN(hh) || isNaN(mm) || isNaN(ss);
 
   const hhRef = useRef();
   const mmRef = useRef();
@@ -35,25 +38,50 @@ const ClockSetting = () => {
   };
 
   const handleClick = () => {
-    const setting = {
-      hours: hhRef.current.value,
-      minutes: mmRef.current.value,
-      seconds: ssRef.current.value
-    };
-    setTime(getTime(setting));
-    reset();
+    const hours = hhRef.current.value;
+    const minutes = mmRef.current.value;
+    const seconds = ssRef.current.value;
+
+    if (hasError(hours, minutes, seconds)) {
+      setError("Error! Please enter number.");
+    } else {
+      setError(null);
+      setTime(getTime({ hours, minutes, seconds }));
+      reset();
+    }
   };
 
   return (
     <div className={"clock-settings"}>
-      <input ref={hhRef} type="text" name="hh" placeholder="hh" />
-      {":"}
-      <input ref={mmRef} type="text" name="mm" placeholder="mm" />
-      {":"}
-      <input ref={ssRef} type="text" name="ss" placeholder="ss" />
-      <button className={"btn-primary"} onClick={handleClick}>
-        Set
-      </button>
+      {error && <div className={"error"}>{error}</div>}
+      <div>
+        <input
+          ref={hhRef}
+          type="text"
+          name="hh"
+          placeholder="hh"
+          maxLength="2"
+        />
+        {":"}
+        <input
+          ref={mmRef}
+          type="text"
+          name="mm"
+          placeholder="mm"
+          maxLength="2"
+        />
+        {":"}
+        <input
+          ref={ssRef}
+          type="text"
+          name="ss"
+          placeholder="ss"
+          maxLength="2"
+        />
+        <button className={"btn-primary"} onClick={handleClick}>
+          Set
+        </button>
+      </div>
     </div>
   );
 };
@@ -74,7 +102,7 @@ const DigitalClock = ({ title }) => {
 };
 
 const AnalogClock = ({ title }) => {
-  const { time, setTime } = useContext(TimeContext);
+  const { time } = useContext(TimeContext);
   const { hours, minutes, seconds } = getHhmmss(time);
 
   const secondsStyle = {

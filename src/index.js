@@ -6,7 +6,7 @@ import "./styles.scss";
 
 export const TimeContext = createContext();
 
-function App() {
+const App = () => {
   const initTime = () => new Date().getTime();
   const [time, setTime] = useState(initTime());
 
@@ -29,7 +29,7 @@ function App() {
       </div>
     </TimeContext.Provider>
   );
-}
+};
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
