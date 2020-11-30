@@ -1,9 +1,14 @@
 .App {
   font-family: sans-serif;
+  font-size: 1em;
   display: flex;
+  flex-wrap: wrap;
   color: #343a40;
+  max-width: 768px;
+  margin: auto;
 }
 .clock {
+  flex: 1 0 300px; 
   min-width: 150px;
   text-align: center;
   display: flex;
@@ -16,19 +21,22 @@
   background: #ccc;
 
   .clock-settings {
+    margin: 2em;
     input {
       display: inline-block;
-      width: 25px;
-      margin: 1px;
+      width: 3em;
+      font-size: inherit;
+      padding: 3px;
+      margin: 3px;
     }
 
     .error {
       color: #a94442;
       background-color: #f2dede;
       border-color: #ebccd1;
-      font-size: 0.5em;
-      margin: 2px;
-      padding-left: 2px;
+      font-size: 1em;
+      margin: 3px;
+      padding-left: 3px;
       text-align: left;
     }
     .btn-primary {
@@ -36,13 +44,17 @@
       background-color: #337ab7;
       border-color: #2e6da4;
       border-radius: 3px;
+      font-size: inherit;
+      padding: 3px;
+      width: 3em;
     }
     padding: 10px;
   }
   .digital-clock {
     flex-basis: 80px;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 35px;
+    font-size: 4em;
+    text-shadow: 1px 1px 2px #000;
     padding: 10px;
   }
 
