@@ -1,3 +1,3 @@
-# react-sync-clock-demo
+# react-sync-clock
 
 Created with CodeSandbox
