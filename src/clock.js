@@ -1,5 +1,5 @@
-import React, { useRef, useContext, useState } from "react";
-import { TimeContext } from "./index";
+import React, { useRef, useState } from "react";
+import { useTimeContext } from "./app";
 
 const formatTime = (time) => {
   return time < 10 ? `0${time}` : time;
@@ -22,9 +22,9 @@ const getHhmmss = (time) => {
 };
 
 const ClockSetting = () => {
-  const { setTime } = useContext(TimeContext);
-  const [error, setError] = useState(null);
+  const { setTime } = useTimeContext();
 
+  const [error, setError] = useState(null);
   const hasError = (hh, mm, ss) => isNaN(hh) || isNaN(mm) || isNaN(ss);
 
   const hhRef = useRef();
@@ -87,7 +87,7 @@ const ClockSetting = () => {
 };
 
 const DigitalClock = ({ title }) => {
-  const { time } = useContext(TimeContext);
+  const { time } = useTimeContext();
   const { hours, minutes, seconds } = getHhmmss(time);
 
   return (
@@ -102,7 +102,7 @@ const DigitalClock = ({ title }) => {
 };
 
 const AnalogClock = ({ title }) => {
-  const { time } = useContext(TimeContext);
+  const { time } = useTimeContext();
   const { hours, minutes, seconds } = getHhmmss(time);
 
   const secondsStyle = {
