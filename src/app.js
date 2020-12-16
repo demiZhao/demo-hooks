@@ -10,15 +10,15 @@ const App = () => {
   const [time, setTime] = useState(initTime());
 
   useEffect(() => {
-    const handleTick = () => {
-      setTime(time + 1000);
+    const tick = () => {
+      setTime((t) => t + 1000);
     };
-    const interval = setInterval(handleTick, 1000);
+    const interval = setInterval(tick, 1000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [time]);
+  }, []);
 
   return (
     <TimeContext.Provider value={{ time, setTime }}>
